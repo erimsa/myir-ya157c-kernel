@@ -56,6 +56,17 @@
                 regulator-max-microvolt = <5000000>;
                 enable-active-high;
 		};
+
+	   reg1: reg1 {
+		regulator-name = "vdd";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+		st,mask-reset;
+		regulator-initial-mode = <0>;
+		regulator-over-current-protection;
+		};
+
 	};
 
 };
@@ -99,8 +110,6 @@
 	hdmi-transmitter@39 {
 		compatible = "sil,sii9022";
 		reg = <0x39>;
-	//	iovcc-supply = <&v3v3_hdmi>;
-	//	cvcc12-supply = <&v1v2_hdmi>;
 		reset-gpios = <&gpioc 7 GPIO_ACTIVE_LOW>;
 		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
 		interrupt-parent = <&gpioa>;
@@ -199,7 +208,7 @@
         st,dirpol;
         st,negedge; 
         bus-width = <8>;
-	    vmmc-supply = <&vmmc>;
+	vmmc-supply = <&vmmc>;
         vqmmc-supply = <&vmmc>;
         status = "okay";
 };
@@ -250,9 +259,22 @@
 	};
 };
 
+&usbotg_hs {
+	dr_mode = "peripheral";
+	force-b-session-valid;
+    /*USB_ID but no use*/
+//    pinctrl-names = "default";
+//    pinctrl-0 = <&usbotg_hs_pins_a>;
+	phys = <&usbphyc_port1 0>;
+	phy-names = "usb2-phy";
+    vbus-supply = <&usb_otg1_vbus>;
+	status = "okay";
+};
+
+
 &vrefbuf {
 	regulator-min-microvolt = <2500000>;
 	regulator-max-microvolt = <2500000>;
-	vdda-supply = <&vdd>;
-	status = "disable";
+	vdda-supply = <&reg1>;
+	status = "okay";
 };
