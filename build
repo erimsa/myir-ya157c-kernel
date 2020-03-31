@@ -1,4 +1,4 @@
-source /opt/st/myir/2.6-snapshot/environment-setup-cortexa7t2hf-neon-vfpv4-openstlinux_weston-linux-gnueabi
+#source /opt/st/myir/2.6-snapshot/environment-setup-cortexa7t2hf-neon-vfpv4-openstlinux_weston-linux-gnueabi
 make ARCH=arm O="$PWD/../build" myc-ya157c_defconfig
 make ARCH=arm uImage vmlinux dtbs LOADADDR=0xC2000040 O="$PWD/../build" -j4
 make ARCH=arm modules O="$PWD/../build" -j4

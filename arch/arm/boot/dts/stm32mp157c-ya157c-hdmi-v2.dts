@@ -57,8 +57,8 @@
                 enable-active-high;
 		};
 
-	   reg1: reg1 {
-		regulator-name = "vdd";
+	   vdd_reg: reg1 {
+		regulator-name = "vdd_reg";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		regulator-always-on;
@@ -66,6 +66,16 @@
 		regulator-initial-mode = <0>;
 		regulator-over-current-protection;
 		};
+
+	   vdd_usb_reg: reg2 {
+                compatible = "regulator-fixed";
+                 reg = <1>;
+                regulator-name = "vdd_usb_reg";
+                regulator-min-microvolt = <3300000>;
+                regulator-max-microvolt = <3300000>;
+                                //interrupts = <IT_CURLIM_LDO4 0>;
+             	};
+
 
 	};
 
@@ -267,14 +277,19 @@
 //    pinctrl-0 = <&usbotg_hs_pins_a>;
 	phys = <&usbphyc_port1 0>;
 	phy-names = "usb2-phy";
-    vbus-supply = <&usb_otg1_vbus>;
+        vbus-supply = <&usb_otg1_vbus>;
 	status = "okay";
+};
+
+&usbphyc {
+        vdd3v3-supply = <&vdd_usb_reg>;
+        status = "okay";
 };
 
 
 &vrefbuf {
 	regulator-min-microvolt = <2500000>;
 	regulator-max-microvolt = <2500000>;
-	vdda-supply = <&reg1>;
+	vdda-supply = <&vdd_reg>;
 	status = "okay";
 };
