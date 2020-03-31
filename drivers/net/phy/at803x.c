@@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
 
 struct at803x_priv {
 	bool phy_reset:1;
+    struct gpio_desc *reset_gpio;
 };
 
 struct at803x_context {
@@ -246,7 +247,17 @@ static int at803x_probe(struct phy_device *phydev)
 
 	//return 0;
 	//If successful, the stm32mp1 dma system will not be reset
-	return -ENOMEM;
+    priv->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+    if (IS_ERR(priv->reset_gpio)) {
+                      dev_err(dev, "cannot get reset-gpio\n");
+                      return PTR_ERR(priv->reset_gpio);
+    }
+               
+    gpiod_set_value_cansleep(priv->reset_gpio, 0);
+    msleep(10);
+    gpiod_set_value_cansleep(priv->reset_gpio, 1);
+    msleep(20);
+	return 0;
 }
 
 static int at803x_config_init(struct phy_device *phydev)
