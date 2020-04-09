@@ -933,6 +933,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
     stm32mp157c-ya157c.dtb \
     stm32mp157c-ya157c-hdmi.dtb \
     stm32mp157c-ya157c-lcd.dtb  \
+    stm32mp157c-ya157c-v2.dtb \
     stm32mp157c-ya157c-hdmi-v2.dtb \
     stm32mp157c-ya157c-lcd-v2.dtb  \
     stm32mp157c-ya157c-a7-examples.dtb 
