@@ -36,6 +36,12 @@
 #include <linux/uaccess.h>
 #include <linux/of.h>
 
+#include <linux/of.h>
+#include <linux/of_gpio.h>
+#include <linux/gpio/consumer.h>
+#include <linux/gpio.h>
+
+
 #include <asm/irq.h>
 
 MODULE_DESCRIPTION("PHY library");
@@ -873,9 +879,13 @@ static int phy_poll_reset(struct phy_device *phydev)
 	return 0;
 }
 
+
+
 int phy_init_hw(struct phy_device *phydev)
 {
 	int ret = 0;
+
+	
 
 	/* Deassert the reset signal */
 	phy_device_reset(phydev, 0);
@@ -1832,7 +1842,6 @@ static int phy_probe(struct device *dev)
 	struct device_driver *drv = phydev->mdio.dev.driver;
 	struct phy_driver *phydrv = to_phy_driver(drv);
 	int err = 0;
-
 	phydev->drv = phydrv;
 
 	/* Disable the interrupt if the PHY doesn't support it

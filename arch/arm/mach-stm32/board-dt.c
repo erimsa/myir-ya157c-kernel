@@ -12,6 +12,10 @@
 #include <asm/v7m.h>
 #endif
 #include <linux/of.h>
+#include <linux/of_gpio.h>
+#include <linux/gpio/consumer.h>
+#include <linux/gpio.h>
+#include <linux/delay.h>
 
 static const char *const stm32_compat[] __initconst = {
 	"st,stm32f429",
@@ -78,16 +82,20 @@ static int ar8035_phy_fixup(struct phy_device *dev)
 
 static void __init stm32mp1_enet_phy_init(void)
 {
-        static struct device_node *np = NULL;
+    static struct device_node *np = NULL;
+
+
 	np = of_find_compatible_node(NULL,NULL,"myir,stm32mp157c-ya157c-v2");
-	if (NULL != np)
-      		phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
-      
+	if (NULL != np){
+		phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
+    }
+
+      		  
 }
 
 static void __init stm32mp1_init_machine(void)
 {
-    stm32mp1_enet_phy_init();
+    //stm32mp1_enet_phy_init();
 }
 
 DT_MACHINE_START(STM32DT, "STM32 (Device Tree Support)")

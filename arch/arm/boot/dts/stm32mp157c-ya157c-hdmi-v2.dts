@@ -7,7 +7,7 @@
 
 /dts-v1/;
 
-#include "stm32mp157c-ya157c.dts"
+#include "stm32mp157c-ya157c-v2.dts"
 
 / {
     model = "MYIR YA157C v2 www.myir-tech.com";
@@ -23,96 +23,12 @@
         dais = </*&sai2a_port &sai2b_port */&i2s2_port>;
         status = "okay";
     };
-
-    vmmcsd_fixed: fixedregulator0 {
-	compatible = "regulator-fixed";
-	regulator-name = "vmmcsd_fixed";
-	regulator-min-microvolt = <3300000>;
-        regulator-max-microvolt = <3300000>;
-		
-	};
-
-    vmmc: fixedregulator@1 {
-        compatible = "regulator-fixed";
-        regulator-name = "vmmc";
-        regulator-min-microvolt = <3300000>;
-        regulator-max-microvolt = <3300000>;
-        startup-delay-us = <70000>;
-        enable-active-high;  
-    };
-
-
-	regulators {
-	    compatible = "simple-bus";
-            #address-cells = <1>;
-            #size-cells = <0>;
-
-			
-	    usb_otg1_vbus: pwr_sw2 {
-                compatible = "regulator-fixed";
-                reg = <1>;
-                regulator-name = "usb_otg1_vbus";
-                regulator-min-microvolt = <5000000>;
-                regulator-max-microvolt = <5000000>;
-                enable-active-high;
-		};
-
-	   vdd_reg: reg1 {
-		regulator-name = "vdd_reg";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		regulator-always-on;
-		st,mask-reset;
-		regulator-initial-mode = <0>;
-		regulator-over-current-protection;
-		};
-
-	   vdd_usb_reg: reg2 {
-                compatible = "regulator-fixed";
-                 reg = <1>;
-                regulator-name = "vdd_usb_reg";
-                regulator-min-microvolt = <3300000>;
-                regulator-max-microvolt = <3300000>;
-                                //interrupts = <IT_CURLIM_LDO4 0>;
-             	};
-
-
-	};
-
-};
-
-&i2c4 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2c4_pins_a>;
-	pinctrl-1 = <&i2c4_pins_sleep_a>;
-	i2c-scl-rising-time-ns = <185>;
-	i2c-scl-falling-time-ns = <20>;
-	status = "okay";
-	/delete-property/dmas;
-	/delete-property/dma-names;
-
-	typec: stusb1600@28 {
-		compatible = "st,stusb1600";
-		reg = <0x28>;
-		status = "okay";
-
-		typec_con: connector {
-			compatible = "usb-c-connector";
-			label = "USB-C";
-			power-role = "sink";
-			power-opmode = "default";
-		};
-	};
-
-	pmic: stpmic@33 {
-		compatible = "st,stpmic1";
-		reg = <0x33>;
-		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
-		interrupt-controller;
-		#interrupt-cells = <2>;
-		status = "disable";
-	};
     
+    phy_pwrseq: phy-pwrseq {
+		compatible = "myir,ar8035";
+		phy-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
+	};
+
 };
 
 
@@ -183,113 +99,3 @@
         };
 };
 
-/* Wifi */
-&sdmmc3 {
-	arm,primecell-periphid = <0x10153180>;
-	pinctrl-names = "default", "opendrain", "sleep";
-	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-	pinctrl-1 = <&sdmmc3_b4_od_pins_a>;
-	pinctrl-2 = <&sdmmc3_b4_sleep_pins_a>;
-	non-removable;
-	st,neg-edge;
-	bus-width = <4>;
-	vmmc-supply = <&vmmcsd_fixed>;
-	mmc-pwrseq = <&wifi_pwrseq>;
-	#address-cells = <1>;
-	#size-cells = <0>;
-	keep-power-in-suspend;
-	status = "okay";
-
-	brcmf: bcrmf@1 {
-		reg = <1>;
-		compatible = "brcm,bcm4329-fmac";
-	};
-};
-
-/*emmc*/
-&sdmmc2 {
-        pinctrl-names = "default", "opendrain", "sleep";
-        pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
-        pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_a>;
-        pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_a>;
-        non-removable;
-        no-sd;
-        no-sdio;
-        st,dirpol;
-        st,negedge; 
-        bus-width = <8>;
-	vmmc-supply = <&vmmc>;
-        vqmmc-supply = <&vmmc>;
-        status = "okay";
-};
-
-/*SD card*/
-&sdmmc1 {
-	pinctrl-names = "default", "opendrain", "sleep";
-	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-	broken-cd;
-	st,neg-edge;
-	bus-width = <4>;
-	vmmc-supply = <&vmmcsd_fixed>;
-	status = "okay";
-};
-
-/*myir pin header
- *ANA0  ANA1 
- *PF13(ADC2_INP2) PF11(ADC1_INP2) 
- *PF14(ADC2_INP6 or ADC2_INN2) 
- *PF12(ADC1_INP6 or ADC1_INN2)
- *
- */
-&adc {
-	status = "okay";
-	adc1: adc@0 {
-		/*
-		 * Type-C USB_PWR_CC1 & USB_PWR_CC2 on in18 & in19.
-		 * Use at least 5 * RC time, e.g. 5 * (Rp + Rd) * C:
-		 * 5 * (56 + 47kOhms) * 5pF => 2.5us.
-		 * Use arbitrary margin here (e.g. 5µs).
-		 */
-		st,min-sample-time-nsecs = <5000>;
-		/* ANA0, ANA1, USB Type-C CC1 & CC2 */
-		st,adc-channels = <0 1 18 19>;
-		status = "okay";
-	};
-	adc2: adc@100 {
-		/* ANA0, ANA1, temp sensor, USB Type-C CC1 & CC2 */
-		st,adc-channels = <0 1 12 18 19>;
-		/* temperature sensor min sample time */
-		st,min-sample-time-nsecs = <10000>;
-		status = "okay";
-	};
-	adc_temp: temp {
-		status = "okay";
-	};
-};
-
-&usbotg_hs {
-	dr_mode = "peripheral";
-	force-b-session-valid;
-    /*USB_ID but no use*/
-//    pinctrl-names = "default";
-//    pinctrl-0 = <&usbotg_hs_pins_a>;
-	phys = <&usbphyc_port1 0>;
-	phy-names = "usb2-phy";
-        vbus-supply = <&usb_otg1_vbus>;
-	status = "okay";
-};
-
-&usbphyc {
-        vdd3v3-supply = <&vdd_usb_reg>;
-        status = "okay";
-};
-
-
-&vrefbuf {
-	regulator-min-microvolt = <2500000>;
-	regulator-max-microvolt = <2500000>;
-	vdda-supply = <&vdd_reg>;
-	status = "okay";
-};
