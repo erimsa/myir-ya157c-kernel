@@ -156,7 +156,7 @@
 		
 	};
 
-    	vmmc: fixedregulator@1 {
+   vmmc: fixedregulator@1 {
         	compatible = "regulator-fixed";
         	regulator-name = "vmmc";
         	regulator-min-microvolt = <3300000>;
@@ -276,8 +276,8 @@
                 		regulator-min-microvolt = <5000000>;
                 		regulator-max-microvolt = <5000000>;
                 		enable-active-high;
-				//interrupts = <IT_OCP_SWOUT 0>;
-				//regulator-active-discharge;
+		    //          interrupts = <IT_OCP_SWOUT 0>;
+		    //          regulator-active-discharge;
 			 };
 		};
 
@@ -302,22 +302,18 @@
 	//vref-supply = <&vrefbuf>;
 	status = "okay";
 	adc1: adc@0 {
-		/*
-		 * Type-C USB_PWR_CC1 & USB_PWR_CC2 on in18 & in19.
-		 * Use at least 5 * RC time, e.g. 5 * (Rp + Rd) * C:
-		 * 5 * (56 + 47kOhms) * 5pF => 2.5us.
-		 * Use arbitrary margin here (e.g. 5µs).
-		 */
-		st,min-sample-time-nsecs = <5000>;
-		/* ANA0, ANA1, USB Type-C CC1 & CC2 */
-		st,adc-channels = <0 1 18 19>;
+		st,min-sample-time-nsecs = <400>;
+		st,adc-channels = <0 1>;
 		status = "okay";
 	};
+    jadc1: jadc@0 {
+        st,adc-channels = <0 1>;
+        /* 16.5 ck_cycles sampling time */
+        st,min-sample-time-nsecs = <400>;
+        status = "okay";
+   };
+
 	adc2: adc@100 {
-		/* ANA0, ANA1, temp sensor, USB Type-C CC1 & CC2 */
-		st,adc-channels = <0 1 12 18 19>;
-		/* temperature sensor min sample time */
-		st,min-sample-time-nsecs = <10000>;
 		status = "okay";
 	};
 	adc_temp: temp {
@@ -358,7 +354,6 @@
 		#size-cells = <0>;
 		compatible = "snps,dwmac-mdio";
 		phy0: ethernet-phy@6 {
-            //compatible = "myir,ar8035";//for board
             reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
             reg = <6>; 
 		};
@@ -376,7 +371,7 @@
 	pinctrl-1 = <&i2c1_pins_sleep_a>;
 	i2c-scl-rising-time-ns = <100>;
 	i2c-scl-falling-time-ns = <7>;
-	status = "okay";
+	status = "disabled";
 	/delete-property/dmas;
 	/delete-property/dma-names;
 
@@ -425,7 +420,7 @@
 		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
 		interrupt-controller;
 		#interrupt-cells = <2>;
-		status = "disable";
+		status = "disabled";
 
 		st,main-control-register = <0x04>;
 		st,vin-control-register = <0xc0>;
@@ -896,18 +891,21 @@
 };
 
 /*USB*/
-//&usbh_ohci {
-//   phys = <&usbphyc_port0>; 
-//   phy-names = "usb";
-//   status = "okay";
-//};
+&usbh_ohci {
+   phys = <&usbphyc_port0>; 
+   phy-names = "usb";
+   status = "okay";
+};
 
 
 &usbotg_hs {
     /*USB_ID but no use*/
 //    pinctrl-names = "default";
 //    pinctrl-0 = <&usbotg_hs_pins_a>;
-    extcon = <&typec>;
+    dr_mode = "peripheral";
+    force-b-session-valid;
+
+    //extcon = <&typec>;
 	phys = <&usbphyc_port1 0>;
 	phy-names = "usb2-phy";
     vbus-supply = <&usb_otg1_vbus>;
@@ -931,5 +929,5 @@
 	regulator-min-microvolt = <2500000>;
 	regulator-max-microvolt = <2500000>;
 	vdda-supply = <&vdd>;
-	status = "disable";
+	status = "disabled";
 };
