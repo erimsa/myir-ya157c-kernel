@@ -896,19 +896,18 @@
 };
 
 /*USB*/
-&usbh_ohci {
-   phys = <&usbphyc_port0>; 
-   phy-names = "usb";
-   status = "okay";
-};
+//&usbh_ohci {
+//   phys = <&usbphyc_port0>; 
+//   phy-names = "usb";
+//   status = "okay";
+//};
 
 
 &usbotg_hs {
-	dr_mode = "peripheral";
-	force-b-session-valid;
     /*USB_ID but no use*/
 //    pinctrl-names = "default";
 //    pinctrl-0 = <&usbotg_hs_pins_a>;
+    extcon = <&typec>;
 	phys = <&usbphyc_port1 0>;
 	phy-names = "usb2-phy";
     vbus-supply = <&usb_otg1_vbus>;
