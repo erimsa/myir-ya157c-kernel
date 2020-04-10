@@ -7,7 +7,7 @@
 /dts-v1/;
 
 #include "stm32mp157c-myc-ya157c.dtsi"
-//#include "stm32mp157c-m4-srm.dtsi"
+#include "stm32mp157c-m4-srm-myir.dtsi"
 #include "stm32mp157cac-ya157c-pinctrl.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
@@ -110,8 +110,6 @@
 	joystick {
 	        compatible = "gpio-keys";
         	#size-cells = <0>;
-        	//pinctrl-0 = <&joystick_pins>;
-        	//pinctrl-names = "default";
         	button-0 {
                		 label = "usr_button";
                		 linux,code = <KEY_ENTER>;
@@ -591,6 +589,10 @@
 	interrupt-names = "wdg";
 	recovery;
 	status = "okay";
+
+    m4_system_resources{
+                status = "okay";
+    };
 };
 
 &pwr {
@@ -744,7 +746,8 @@
 	};
 };
 
-/*SPI*/
+/*SPI1 for A7 core*/
+/*
 &spi1 {
 	pinctrl-names = "default", "sleep";
         pinctrl-0 = <&spi1_pins_a>;
@@ -758,16 +761,15 @@
     };
 
 };
-
-/*spi2*/
-/*
-&spi2 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&spi2_pins_a>;//Pin used by camera (D8 and D10)
-	pinctrl-1 = <&spi2_sleep_pins_a>;
-	status = "disable";
-};
 */
+
+/*SPI1 for M4 core*/
+&m4_spi1 {
+   pinctrl-names = "rproc_default";
+   pinctrl-0 = <&m4_spi1_pins_z_mx>;
+   status = "okay";
+
+};
 
 /*spi4*/
 &spi4 {
@@ -904,8 +906,8 @@
 //    pinctrl-0 = <&usbotg_hs_pins_a>;
     dr_mode = "peripheral";
     force-b-session-valid;
-
-    //extcon = <&typec>;
+//    dr_mode = "otg";
+//    extcon = <&typec>;
 	phys = <&usbphyc_port1 0>;
 	phy-names = "usb2-phy";
     vbus-supply = <&usb_otg1_vbus>;

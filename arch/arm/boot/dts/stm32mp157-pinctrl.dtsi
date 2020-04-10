@@ -1463,7 +1463,6 @@
 						 <STM32_PINMUX('Z', 5, ANALOG)>; /* I2C4_SDA */
 				};
 			};
-
 			spi1_pins_a: spi1-0 {
 				pins1 {
 					pinmux = <STM32_PINMUX('Z', 0, AF5)>, /* SPI1_SCK */
@@ -1486,6 +1485,7 @@
 						 <STM32_PINMUX('Z', 2, ANALOG)>; /* SPI1_MOSI */
 				};
 			};
+
 		};
 	};
 };

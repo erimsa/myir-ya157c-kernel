@@ -601,6 +601,7 @@
 };
 
 /*SPI*/
+/*
 &spi1 {
 	pinctrl-names = "default", "sleep";
         pinctrl-0 = <&spi1_pins_a>;
@@ -614,6 +615,7 @@
     };
 
 };
+*/
 
 /*spi2*/
 /*

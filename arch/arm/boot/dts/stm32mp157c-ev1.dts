@@ -659,14 +659,14 @@
 		};
 	};
 };
-
+/*
 &spi1 {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&spi1_pins_a>;
 	pinctrl-1 = <&spi1_sleep_pins_a>;
 	status = "disabled";
 };
-
+*/
 &timers2 {
 	status = "disabled";
 	/* spare dmas for other usage (un-delete to enable pwm capture) */
