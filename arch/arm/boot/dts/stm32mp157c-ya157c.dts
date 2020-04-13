@@ -7,7 +7,7 @@
 /dts-v1/;
 
 #include "stm32mp157c-myc-ya157c.dtsi"
-//#include "stm32mp157c-m4-srm.dtsi"
+#include "stm32mp157c-m4-srm-myir.dtsi"
 #include "stm32mp157cac-ya157c-pinctrl.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
@@ -244,6 +244,20 @@
         /delete-property/dmas;
         /delete-property/dma-names;
 	//clock-frequency = <100000>;
+	
+	touchscreen@38 {
+              compatible ="edt,edt-ft5x06";
+              reg = <0x38>;
+
+              interrupts = <8  IRQ_TYPE_EDGE_FALLING>;
+              interrupt-parent = <&gpiog>;
+              interrupt-controller;
+              touchscreen-size-x = <800>;
+              touchscreen-size-y = <480>;
+
+              reset-gpios = <&gpiog 2 GPIO_ACTIVE_LOW>;
+              status = "okay";
+      };
 };
 
 
@@ -600,7 +614,7 @@
 	};
 };
 
-/*SPI*/
+/*SPI for A7 core*/
 /*
 &spi1 {
 	pinctrl-names = "default", "sleep";
@@ -616,6 +630,14 @@
 
 };
 */
+
+/*SPI1 for M4 core*/
+&m4_spi1 {
+   pinctrl-names = "rproc_default";
+   pinctrl-0 = <&m4_spi1_pins_z_mx>;
+   status = "okay";
+
+};
 
 /*spi2*/
 /*
@@ -757,9 +779,9 @@
 
 
 &usbotg_hs {
-	//dr_mode = "peripheral";
-	//force-b-session-valid;
-    extcon = <&typec>;
+	dr_mode = "peripheral";
+	force-b-session-valid;
+    //extcon = <&typec>;
 	phys = <&usbphyc_port1 0>;
 	phy-names = "usb2-phy";
 	status = "okay";

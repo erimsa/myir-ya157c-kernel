@@ -70,20 +70,5 @@
            };
 };
 
-/*touch*/
-&i2c2 {
-      touchscreen@38 {
-              compatible ="edt,edt-ft5x06";
-              reg = <0x38>;
 
-              interrupts = <8  IRQ_TYPE_EDGE_FALLING>;
-              interrupt-parent = <&gpiog>;
-              interrupt-controller;
-              touchscreen-size-x = <800>;
-              touchscreen-size-y = <480>;
-
-              reset-gpios = <&gpiog 2 GPIO_ACTIVE_LOW>;
-              status = "okay";
-      };
-};
 

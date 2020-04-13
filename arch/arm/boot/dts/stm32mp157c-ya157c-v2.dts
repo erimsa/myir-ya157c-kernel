@@ -146,7 +146,7 @@
 		st,no-lsfs-sc;
 	};
 		
-	vmmcsd_fixed: fixedregulator0 {
+	vmmcsd_fixed: fixedregulator@0 {
 		compatible = "regulator-fixed";
 		regulator-name = "vmmcsd_fixed";
 		regulator-min-microvolt = <3300000>;
@@ -385,6 +385,20 @@
         /delete-property/dmas;
         /delete-property/dma-names;
 	clock-frequency = <100000>;
+	
+	touchscreen@38 {
+              compatible ="edt,edt-ft5x06";
+              reg = <0x38>;
+
+              interrupts = <8  IRQ_TYPE_EDGE_FALLING>;
+              interrupt-parent = <&gpiog>;
+              interrupt-controller;
+              touchscreen-size-x = <800>;
+              touchscreen-size-y = <480>;
+
+              reset-gpios = <&gpiog 2 GPIO_ACTIVE_LOW>;
+              status = "okay";
+      };
 
 };
 
