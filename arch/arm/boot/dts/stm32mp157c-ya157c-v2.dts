@@ -41,7 +41,7 @@
 
 	panel_backlight: panel-backlight {
 		compatible = "gpio-backlight";
-		//gpios = <&gpioe 6 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpioe 12 GPIO_ACTIVE_HIGH>;
 		default-on;
 			
 		status = "okay";
