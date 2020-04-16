@@ -267,16 +267,16 @@
 				regulator-active-discharge;
 			 };
 
-			 usb_otg1_vbus: pwr_sw2 {
-                		compatible = "regulator-fixed";
-                		reg = <1>;
-                		regulator-name = "usb_otg1_vbus";
-                		regulator-min-microvolt = <5000000>;
-                		regulator-max-microvolt = <5000000>;
-                		enable-active-high;
+			// usb_otg1_vbus: pwr_sw2 {
+            //    		compatible = "regulator-fixed";
+            //    		reg = <1>;
+            //    		regulator-name = "usb_otg1_vbus";
+            //    		regulator-min-microvolt = <5000000>;
+            //    		regulator-max-microvolt = <5000000>;
+            //    		enable-active-high;
 		    //          interrupts = <IT_OCP_SWOUT 0>;
 		    //          regulator-active-discharge;
-			 };
+			// };
 		};
 
 	
