@@ -413,18 +413,22 @@
 	/delete-property/dmas;
 	/delete-property/dma-names;
 
-	typec: stusb1600@28 {
-		compatible = "st,stusb1600";
-		reg = <0x28>;
-		status = "okay";
-
-		typec_con: connector {
-			compatible = "usb-c-connector";
-			label = "USB-C";
-			power-role = "sink";
-			power-opmode = "default";
-		};
-	};
+	 typec: stusb1600@28 {
+         compatible = "st,stusb1600";
+         reg = <0x28>;
+         interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
+         interrupt-parent = <&gpiog>;
+         pinctrl-names = "default";
+         pinctrl-0 = <&stusb1600_pins_a>;
+         status = "okay";
+ 
+         typec_con: connector {
+             compatible = "usb-c-connector";
+             label = "USB-C";
+             power-role = "dual";
+             power-opmode = "default";
+         };
+     };
 
 	pmic: stpmic@33 {
 		compatible = "st,stpmic1";
@@ -919,13 +923,12 @@
     /*USB_ID but no use*/
 //    pinctrl-names = "default";
 //    pinctrl-0 = <&usbotg_hs_pins_a>;
-    dr_mode = "peripheral";
-    force-b-session-valid;
-//    dr_mode = "otg";
-//    extcon = <&typec>;
-	phys = <&usbphyc_port1 0>;
-	phy-names = "usb2-phy";
-    vbus-supply = <&usb_otg1_vbus>;
+//    dr_mode = "peripheral";
+//    force-b-session-valid;
+
+    extcon = <&typec>;
+    phys = <&usbphyc_port1 0>;
+    phy-names = "usb2-phy";
 	status = "okay";
 };
 
