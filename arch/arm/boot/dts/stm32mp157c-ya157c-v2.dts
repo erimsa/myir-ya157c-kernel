@@ -712,8 +712,9 @@
 	status = "okay";
 
 	bluetooth {
-		pinctrl-names = "default";
-		pinctrl-0 = <&btreg0>;
+		//pinctrl-names = "default";
+		//pinctrl-0 = <&btreg0>;
+        shutdown-gpios = <&gpiof 15 GPIO_ACTIVE_HIGH>; 
 		compatible = "brcm,bcm43438-bt";
 		max-speed = <3000000>;
 	};
