@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+* Copyright (C) MYIR 2019 - All Rights Reserved
+* Author: myir
+* support:support.cn@myirtech.com 
+*/
+
+/dts-v1/;
+
+#include "stm32mp153c-ya153c-t-hdmi.dts"
+
+/ {
+    model = "MYIR YA153C-T www.myir-tech.com";
+    compatible = "myir,stm32mp157c-ya157c-t", "st,stm32mp157c-dk2", "st,stm32mp157";
+    
+
+};
+
+
+
+

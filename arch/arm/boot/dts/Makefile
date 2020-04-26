@@ -936,7 +936,16 @@ dtb-$(CONFIG_ARCH_STM32) += \
     stm32mp157c-ya157c-v2.dtb \
     stm32mp157c-ya157c-hdmi-v2.dtb \
     stm32mp157c-ya157c-lcd-v2.dtb  \
-    stm32mp157c-ya157c-a7-examples.dtb 
+    stm32mp157c-ya157c-a7-examples.dtb \
+    stm32mp151c-ya151c-t.dtb \
+    stm32mp151c-ya151c-t-hdmi.dtb \
+    stm32mp151c-ya151c-t-lcd.dtb \
+    stm32mp153c-ya153c-t.dtb \
+    stm32mp153c-ya153c-t-hdmi.dtb \
+    stm32mp153c-ya153c-t-lcd.dtb \
+    stm32mp157c-ya157c-t.dtb \
+    stm32mp157c-ya157c-t-hdmi.dtb \
+    stm32mp157c-ya157c-t-lcd.dtb 
     #stm32mp157c-ya157c-m4-examples.dtb
 
 dtb-$(CONFIG_MACH_SUN4I) += \

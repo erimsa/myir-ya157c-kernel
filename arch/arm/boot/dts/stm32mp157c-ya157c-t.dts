@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Based on stm32mp157a device number configuration
+ * Author: licy.li@myirtech.com
+ */
+
+/dts-v1/;
+
+#include "stm32mp153c-ya153c-t.dts"
+
+
+/ {
+	model = "MYIR YA157C-T www.myir-tech.com";
+	compatible = "myir,stm32mp157c-ya157c-t", "st,stm32mp157c-dk2", "st,stm32mp157";
+
+
+};
+
+

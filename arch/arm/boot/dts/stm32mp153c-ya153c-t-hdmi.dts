@@ -7,35 +7,34 @@
 
 /dts-v1/;
 
-#include "stm32mp157c-ya157c.dts"
+#include "stm32mp153c-ya153c-t.dts"
 
 / {
-    model = "MYIR YA157C www.myir-tech.com";
-    compatible = "myir,stm32mp157c-ya157c", "st,stm32mp157c-dk2", "st,stm32mp157";
+    model = "MYIR YA153C-T www.myir-tech.com";
+    compatible = "myir,stm32mp153c-ya153c-t", "myir,stm32mp157c-ya157c", "st,stm32mp157c-dk2", "st,stm32mp157";
     
     sound {
-
-        compatible = "audio-graph-card";
+       /* compatible = "audio-graph-card";
         label = "STM32MP1-DK";
         routing =
                 "Playback" , "MCLK",
                 "Capture" , "MCLK",
-                "MICL" , "Mic Bias";
+                "MICL" , "Mic Bias";*/
         dais = </*&sai2a_port &sai2b_port */&i2s2_port>;
         status = "okay";
     };
 
 };
 
-&i2c2 {
+&i2c1 {
 	hdmi-transmitter@39 {
 		compatible = "sil,sii9022";
 		reg = <0x39>;
 	//	iovcc-supply = <&v3v3_hdmi>;
 	//	cvcc12-supply = <&v1v2_hdmi>;
-		reset-gpios = <&gpioc 7 GPIO_ACTIVE_LOW>;
-		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
-		interrupt-parent = <&gpioa>;
+		reset-gpios = <&gpiof 10 GPIO_ACTIVE_LOW>;
+		interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+		interrupt-parent = <&gpiod>;
 		pinctrl-names = "default", "sleep";
 		pinctrl-0 = <&ltdc_pins_a>;
 		pinctrl-1 = <&ltdc_pins_sleep_a>;
@@ -51,7 +50,7 @@
 					remote-endpoint = <&ltdc_ep1_out>;
 				};
 			};
-
+		
 			port@1 {
 				reg = <1>;
 				sii9022_tx_endpoint: endpoint {
@@ -63,6 +62,7 @@
 
 
 };
+
 
 &i2s2 {
 	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;

@@ -85,17 +85,28 @@ static void __init stm32mp1_enet_phy_init(void)
     static struct device_node *np = NULL;
 
 
-	np = of_find_compatible_node(NULL,NULL,"myir,stm32mp157c-ya157c-v2");
+	np = of_find_compatible_node(NULL,NULL,"myir,stm32mp151c-ya151c-t");
 	if (NULL != np){
 		phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
     }
+
+    np = of_find_compatible_node(NULL,NULL,"myir,stm32mp153c-ya153c-t");
+    if (NULL != np){
+           phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
+     }
+    
+    np = of_find_compatible_node(NULL,NULL,"myir,stm32mp157c-ya157c-t");
+    if (NULL != np){
+            phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
+     }
+
 
       		  
 }
 
 static void __init stm32mp1_init_machine(void)
 {
-    //stm32mp1_enet_phy_init();
+    stm32mp1_enet_phy_init();
 }
 
 DT_MACHINE_START(STM32DT, "STM32 (Device Tree Support)")
