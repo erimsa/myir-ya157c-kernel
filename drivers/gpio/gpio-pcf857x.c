@@ -266,8 +266,11 @@ static int pcf857x_probe(struct i2c_client *client,
 
 	if (IS_ENABLED(CONFIG_OF) && np)
 		of_property_read_u32(np, "lines-initial-states", &n_latch);
-	else if (pdata)
+	else if (pdata){
 		n_latch = pdata->n_latch;
+        printk("=========================n_latch = %d\n", n_latch);
+
+    }
 	else
 		dev_dbg(&client->dev, "no platform data\n");
 

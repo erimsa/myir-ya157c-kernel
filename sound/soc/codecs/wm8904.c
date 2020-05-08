@@ -2124,6 +2124,8 @@ static const struct of_device_id wm8904_of_match[] = {
 		/* sentinel */
 	}
 };
+
+
 MODULE_DEVICE_TABLE(of, wm8904_of_match);
 #endif
 
@@ -2133,7 +2135,7 @@ static int wm8904_i2c_probe(struct i2c_client *i2c,
 	struct wm8904_priv *wm8904;
 	unsigned int val;
 	int ret, i;
-
+printk("----------------------------------------------------------\n");
 	wm8904 = devm_kzalloc(&i2c->dev, sizeof(struct wm8904_priv),
 			      GFP_KERNEL);
 	if (wm8904 == NULL)
@@ -2143,6 +2145,7 @@ static int wm8904_i2c_probe(struct i2c_client *i2c,
 	if (IS_ERR(wm8904->mclk)) {
 		ret = PTR_ERR(wm8904->mclk);
 		dev_err(&i2c->dev, "Failed to get MCLK\n");
+        printk("=================================mclk \n");
 		return ret;
 	}
 

@@ -126,3 +126,14 @@ config IEEE802154_HWSIM
 
 	  This driver can also be built as a module. To do so say M here.
 	  The module will be called 'mac802154_hwsim'.
+
+config IEEE802154_SX1278
+       tristate "Semtech SX1276/77/78/79 transceiver driver"
+       depends on IEEE802154_DRIVERS && MAC802154
+       depends on SPI
+       select REGMAP_SPI
+       ---help---
+       Say Y here to enable the SX1278 SPI 802.15.4 wireless
+       controller.
+            This driver can also be built as a module. To do so, say M here.
+            the module will be called 'sx1278'.

@@ -120,6 +120,29 @@ static void __init stm32mp1_enet_phy_init(void)
 	phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
     }
 
+	
+	
+            
+            gpio = of_get_named_gpio_flags(nphy, "phy1-gpios", 0, &flags);
+            if(!gpio_is_valid(gpio)){
+                    printk("the phy1 gpio failed\n");
+                    
+            }else{
+                
+                if(gpio_request(gpio, "phy1-gpio"))
+                {
+                    printk("can not request gpio\n");
+                    gpio_free(gpio);
+                }else{
+                    gpio_direction_output(gpio, 0);  
+			printk("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");                                                      
+                     msleep(10);
+                    gpio_free(gpio);
+
+                }
+	}
+       
+
       		  
 }
 

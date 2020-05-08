@@ -16,7 +16,7 @@
 
 / {
 	model = "MYIR YA151C-T www.myir-tech.com";
-	compatible = "myir,stm32mp151c-ya151c", "myir,stm32mp157c-ya157c", "st,stm32mp157c-dk2", "st,stm32mp157";
+	compatible = "myir,stm32mp151c-ya151c-t", "myir,stm32mp157c-ya157c", "st,stm32mp157c-dk2", "st,stm32mp157";
 
 	aliases {
 		ethernet0 = &ethernet0;
@@ -38,10 +38,18 @@
 		compatible = "mmc-pwrseq-simple";
 		reset-gpios = <&gpiof 3 GPIO_ACTIVE_LOW>;
 	};
+
+	lte_pwrseq: lte-pwrseq {
+        	compatible = "myir,lte_pwrseq";
+        	pwr-gpios = <&pcf8575 0 GPIO_ACTIVE_LOW>;
+    	};
+
     	phy_pwrseq: phy-pwrseq {
         	compatible = "myir,ar8035";
         	phy-gpios = <&gpiof 2 GPIO_ACTIVE_LOW>;
+		phy1-gpios = <&pcf8575 8 GPIO_ACTIVE_LOW>;
     	};
+
 	/*camera clocks*/
 	 clocks {
 		clk_ext_camera: clk-ext-camera {
@@ -50,10 +58,13 @@
 			clock-frequency = <24000000>;
 		};
 	};
+	
+	
+
 		
 	sound {
 		compatible = "audio-graph-card";
-		label = "STM32MP1-DK";
+		label = "STM32MP1-myir";
 		routing =
 			"Playback" , "MCLK",
 			"Capture" , "MCLK",
@@ -64,7 +75,7 @@
 
 	panel_backlight: panel-backlight {
 		compatible = "gpio-backlight";
-		gpios = <&gpiog 1 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpiog 8 GPIO_ACTIVE_HIGH>;
 		default-on;	
 		status = "okay";
 	};
@@ -306,7 +317,7 @@
         status = "okay";
         /delete-property/dmas;
         /delete-property/dma-names;
-	//clock-frequency = <100000>;
+	clock-frequency = <100000>;
 	
 	touchscreen@38 {
               compatible ="edt,edt-ft5x06";
@@ -341,6 +352,22 @@
 		};
 	};
 
+
+	//pcf8575: gpio@20 {
+	//	status = "okay";
+	//	compatible = "nxp,pcf8575";
+	//	reg = <0x20>;
+	//	gpio-controller;
+	//	gpio-cells = <2>;
+	//	interrupt-controller;
+	//	#interrupt-cells = <2>;
+	//	lines-initial-states = <0xFFFF>;
+	//	//lines-initial-states = 
+		//	"1","0","0","0","1","1","1","1",/*P00~P07, 3V3,4GPwr,4GWKin,4GWKout,4GRST,CAMRST,CAMRST,LORARST*/
+		//	"1","1","0","0","0","0","0","0";/*P10~P17, Net RST,484_DE*/
+	//};
+
+
 	pcf8575: gpio@20 {
 		compatible = "nxp,pcf8575";
 		reg = <0x20>;
@@ -348,34 +375,36 @@
 		#gpio-cells = <2>;
 		interrupt-controller;
 		#interrupt-cells = <2>;
-		lines-initial-states = 
-			"1","1","0","0","0","1","1","1",/*P00~P07, 3V3,4GPwr,4GWKin,4GWKout,4GRST,CAMRST,CAMRST,LORARST*/
-			"1","1","0","0","0","0","0","0";/*P10~P17, Net RST,484_DE*/
+		//lines-initial-states = <0x0f2b>; 
+		status = "okay";
+		gpio-line-names = "3V3","4GPwr","4GWKin","4GWKout","4GRST","CAMRST","CAMRST","LORARST",
+				  "Net RST","484_DE","p12","p13","p14","p15","p16","p17";
+		
+		
 	};
 
+/*
+	at9555: gpio@20 {
+		compatible = "analogtek,at9555";
+		status = "okay";
+		reg = <0x20>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+*/
 	codec_wm8904: wm8904@1a {
 		compatible = "wlf,wm8904";
 		reg = <0x1a>;
-		//clocks = <&pck0>;
-		//clock-names = "mclk";
+		clocks = <&rcc SPI2_K>;
+		clock-names = "mclk";
 		status = "okay";
 				
-		wm8904_port: port {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			wm8904_tx: endpoint@0 {
-				reg = <0>;
-				remote-endpoint = <&i2s1_endpoint0>;
+		codec_port: port@0 {
+			codec_endpoint: endpoint {
+				remote-endpoint = <&cpu_endpoint>;
 			};
-/*
-			wm8904_rx: endpoint@1 {
-				reg = <1>;
-				remote-endpoint = <&i2s1_endpoint1>;
-			};
-*/
-				
 		};
+
 	};
 };
 
@@ -389,24 +418,7 @@
 	status = "okay";
 	/delete-property/dmas;
 	/delete-property/dma-names;
-/*
-	typec: stusb1600@28 {
-         	compatible = "st,stusb1600";
-         	reg = <0x28>;
-         	interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
-         	interrupt-parent = <&gpiog>;
-         	pinctrl-names = "default";
-         	pinctrl-0 = <&stusb1600_pins_a>;
-         	status = "okay";
- 
-         	typec_con: connector {
-             		compatible = "usb-c-connector";
-             		label = "USB-C";
-             		power-role = "dual";
-             		power-opmode = "default";
-         	};
-     };
-*/
+
 	pmic: stpmic@33 {
 		compatible = "st,stpmic1";
 		reg = <0x33>;
@@ -563,24 +575,13 @@
 	pinctrl-1 = <&i2s1_sleep_pins_z_mx>;
 	status = "okay";
 	
-	i2s1_port: port {
-		i2s1_endpoint0: endpoint {
-			remote-endpoint = <&wm8904_tx>;
+	i2s1_port: port@0 {
+		cpu_endpoint: endpoint {
+			remote-endpoint = <&codec_endpoint>;
 			format = "i2s";
 			mclk-fs = <256>;
 		};
 	};
-/*
-	i2s1_port2: port {
-		i2s1_endpoint1: endpoint {
-			remote-endpoint = <&wm8904_rx>;
-			format = "i2s";
-			mclk-fs = <256>;
-		};
-	};
-*/
-
-
 
 };
 
@@ -753,13 +754,43 @@
 	};
 };
 
+/*SPI5 for sx1278*/
+
+&spi5 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&spi5_pins_mx>;
+	pinctrl-1 = <&spi5_sleep_pins_mx>;
+	status = "okay";
+        cs-gpios = <&gpioh 5 0>;
+
+/*
+	spidev@0 {     
+       		 compatible = "spidev";
+        	spi-max-frequency = <20000000>;
+        	reg = <0>;
+	};
+*/
+
+	sx1278@0 {
+		compatible = "sx1278";
+		reg = <0>;
+		status = "okay";
+		spi-max-frequency = <0x3b60>;
+		clock-frequency = <32000000>;
+	};
+
+
+
+};
+
+
 /*SPI for A7 core*/
 /*
 &spi1 {
 	pinctrl-names = "default", "sleep";
         pinctrl-0 = <&spi1_pins_a>;
         pinctrl-1 = <&spi1_sleep_pins_a>;
-	    cs-gpios = <&gpioz 3 0>;
+	cs-gpios = <&gpioz 3 0>;
         status = "okay";
 	spidev@0 {     
        		 compatible = "spidev";
@@ -771,48 +802,17 @@
 */
 
 /*SPI1 for M4 core*/
+/*
 &m4_spi1 {
    pinctrl-names = "rproc_default";
    pinctrl-0 = <&m4_spi1_pins_z_mx>;
    status = "okay";
 
 };
-
-/*spi2*/
-/*
-&spi2 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&spi2_pins_a>;//Pin used by camera (D8 and D10)
-	pinctrl-1 = <&spi2_sleep_pins_a>;
-	status = "disable";
-};
 */
 
-/*spi4*/
-/*&spi4 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&spi4_pins_a>;
-	pinctrl-1 = <&spi4_sleep_pins_a>;
-	status = "disabled";
-};
-*/
-/*spi5*/
-&spi5 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&spi5_pins_a>;
-	pinctrl-1 = <&spi5_sleep_pins_a>;
-	status = "disabled";
-};
-
-/*i2s for wm8904*/
-&i2s1{
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2s1_pins_z_mx>;
-	pinctrl-1 = <&i2s1_sleep_pins_z_mx>;
-	status = "okay";
 
 
-};
 
 &timers1 {
 	/* spare dmas for other usage */
@@ -931,7 +931,7 @@
 };
 */
 
-
+/*
 &usbotg_hs {
 	pinctrl-names = "default";
 	pinctrl-0 = <&usbotg_hs_pins_a>;  
@@ -940,20 +940,33 @@
         vbus-supply = <&vbus_otg>;
 	status = "okay";
 };
+*/
 
 
+&usbotg_hs {
+	dr_mode = "host";
+	pinctrl-names = "default";
+	pinctrl-0 = <&usbotg_hs_pins_a>;  
+        phys = <&usbphyc_port1 1>;
+	phy-names = "usb2-phy";
+        vbus-supply = <&vbus_otg>;
+	status = "okay";
+};
+
+/*
+&usbh_ehci {
+	phys = <&usbphyc_port1 1>;
+	phy-names = "usb2-phy";
+	status = "okay";
+};
 
 
-//&usbotg_hs {
-	//compatible = "st,stm32mp1-fsotg", "snps,dwc2";                            /* Use full-speed integrated PHY */
-//	pinctrl-names = "default";
-//	pinctrl-0 = <&usbotg_hs_pins_a>;                  /* configure OTG ID and full-speed data pins */
-//	vbus-supply = <&vbus_otg>;                                                /* voltage regulator to supply Vbus */
-//	phys = <&usbphyc_port1 0>;
-//	phy-names = "usb2-phy";
-//	status = "okay";
-//};
-
+&usbh_ohci {
+   phys = <&usbphyc_port1 1>; 
+   phy-names = "usb2-phy";
+   status = "okay";
+};
+*/
 
 &usbphyc {
 	vdd3v3-supply = <&vdd_usb>;
