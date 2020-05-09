@@ -52,6 +52,7 @@
 #include <linux/delay.h>
 #include <asm/div64.h>
 #include <linux/uaccess.h>
+#include <linux/gpio/consumer.h>
 
 #include "lora.h"
 
@@ -146,6 +147,8 @@
 #define SX127X_FLAGMASK_CADDONE			0x04
 #define SX127X_FLAGMASK_FHSSCHANGECHANNEL	0x02
 #define SX127X_FLAGMASK_CADDETECTED		0x01
+
+
 
 /**
  * sx127X_readVersion - Get LoRa device's chip version
@@ -958,10 +961,13 @@ sx127X_startLoRaMode(struct regmap *rm)
 int
 init_sx127X(struct regmap *rm)
 {
+    
 	int v;
 #ifdef DEBUG
 	uint8_t fv, mmv;
 #endif
+  
+
 
 	dev_dbg(regmap_get_device(rm), "init sx127X\n");
 
@@ -1745,6 +1751,8 @@ static int loraspi_probe(struct spi_device *spi)
 	}
 #endif
 
+	
+
 	loraspi_probe_acpi(spi);
 
 	/* Allocate lora device's data. */
@@ -1760,6 +1768,16 @@ static int loraspi_probe(struct spi_device *spi)
 		dev_err(&(spi->dev), "regmap_init() failed: %d\n", status);
 		return status;
 	}
+
+	/**power**/
+	  lrdata->pwr_gpio = devm_gpiod_get_optional(&(spi->dev),
+                                           "pwr", GPIOD_OUT_HIGH);
+  	if (IS_ERR(lrdata->pwr_gpio)) {
+            
+              dev_err(&(spi->dev), "buggy DT: LoRa not found pwr\n");
+          
+    	}
+   	gpiod_set_value_cansleep(lrdata->pwr_gpio, 1);
 
 	/* Initial the SX127X chip. */
 	v = init_sx127X(lrdata->lora_device);

@@ -41,12 +41,16 @@
 
 	lte_pwrseq: lte-pwrseq {
         	compatible = "myir,lte_pwrseq";
-        	pwr-gpios = <&pcf8575 0 GPIO_ACTIVE_LOW>;
+        	lte-gpios = <&pcf8575 1 GPIO_ACTIVE_LOW>;
     	};
 
     	phy_pwrseq: phy-pwrseq {
         	compatible = "myir,ar8035";
         	phy-gpios = <&gpiof 2 GPIO_ACTIVE_LOW>;
+    	};
+	
+	phy_pwrseq_dm: phy-pwrseqdm {
+        	compatible = "myir,dm9061";
 		phy1-gpios = <&pcf8575 8 GPIO_ACTIVE_LOW>;
     	};
 
@@ -55,12 +59,9 @@
 		clk_ext_camera: clk-ext-camera {
 			#clock-cells = <0>;
 			compatible = "fixed-clock";
-			clock-frequency = <24000000>;
+			clock-frequency = <12000000>;
 		};
 	};
-	
-	
-
 		
 	sound {
 		compatible = "audio-graph-card";
@@ -277,19 +278,9 @@
 	pinctrl-1 = <&dcmi_sleep_pins_mx>;
 
 	port {
-/*
-		dcmi_0: endpoint {
-			remote-endpoint = <&ov5640_0>;
-			bus-width = <8>;
-			hsync-active = <0>;
-			vsync-active = <0>;
-			pclk-sample = <1>;
-			pclk-max-frequency = <77000000>;
-		};
-*/
 		dcmi_0: endpoint {
 			remote-endpoint = <&camera0>;
-			link-frequencies = /bits/ 64 <70000000>;
+                        link-frequencies = /bits/ 64 <70000000>;
 		};
 	};
 };
@@ -339,33 +330,19 @@
 		reg = <0x30>;
 		clocks = <&clk_ext_camera>;
 		clock-names = "xvclk";
-		//powerdown-gpios = <&gpioi 9 GPIO_ACTIVE_HIGH>;
-		//reset-gpios = <&gpioi 10 GPIO_ACTIVE_LOW>;
+		powerdown-gpios = <&pcf8575 5 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+		reset-gpios = <&pcf8575 6 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
 
 		status = "okay";
 		
 		port {
 			camera0: endpoint {
 				remote-endpoint = <&dcmi_0>;
-				link-frequencies = /bits/ 64 <70000000>;
+                                link-frequencies = /bits/ 64 <70000000>;
+
 			};
 		};
 	};
-
-
-	//pcf8575: gpio@20 {
-	//	status = "okay";
-	//	compatible = "nxp,pcf8575";
-	//	reg = <0x20>;
-	//	gpio-controller;
-	//	gpio-cells = <2>;
-	//	interrupt-controller;
-	//	#interrupt-cells = <2>;
-	//	lines-initial-states = <0xFFFF>;
-	//	//lines-initial-states = 
-		//	"1","0","0","0","1","1","1","1",/*P00~P07, 3V3,4GPwr,4GWKin,4GWKout,4GRST,CAMRST,CAMRST,LORARST*/
-		//	"1","1","0","0","0","0","0","0";/*P10~P17, Net RST,484_DE*/
-	//};
 
 
 	pcf8575: gpio@20 {
@@ -373,14 +350,8 @@
 		reg = <0x20>;
 		gpio-controller;
 		#gpio-cells = <2>;
-		interrupt-controller;
-		#interrupt-cells = <2>;
-		//lines-initial-states = <0x0f2b>; 
+		lines-initial-states = <0xffff>; 
 		status = "okay";
-		gpio-line-names = "3V3","4GPwr","4GWKin","4GWKout","4GRST","CAMRST","CAMRST","LORARST",
-				  "Net RST","484_DE","p12","p13","p14","p15","p16","p17";
-		
-		
 	};
 
 /*
@@ -762,25 +733,14 @@
 	pinctrl-1 = <&spi5_sleep_pins_mx>;
 	status = "okay";
         cs-gpios = <&gpioh 5 0>;
-
-/*
-	spidev@0 {     
-       		 compatible = "spidev";
-        	spi-max-frequency = <20000000>;
-        	reg = <0>;
+	
+	sx127x@0 {
+		compatible = "semtech,sx127x";
+		reg = <0x0>;
+		reset-gpios = <&pcf8575 7 GPIO_ACTIVE_LOW>; //p07
+		txrxswitch-gpios = <&pcf8575 14 GPIO_ACTIVE_HIGH>, <&pcf8575 15 GPIO_ACTIVE_HIGH>; //
+		spi-max-frequency = <10000000>;
 	};
-*/
-
-	sx1278@0 {
-		compatible = "sx1278";
-		reg = <0>;
-		status = "okay";
-		spi-max-frequency = <0x3b60>;
-		clock-frequency = <32000000>;
-	};
-
-
-
 };
 
 
@@ -953,6 +913,7 @@
 	status = "okay";
 };
 
+
 /*
 &usbh_ehci {
 	phys = <&usbphyc_port1 1>;
@@ -967,6 +928,7 @@
    status = "okay";
 };
 */
+
 
 &usbphyc {
 	vdd3v3-supply = <&vdd_usb>;

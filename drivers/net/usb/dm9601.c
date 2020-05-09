@@ -22,6 +22,12 @@
 #include <linux/usb/usbnet.h>
 #include <linux/slab.h>
 
+#include <linux/of.h>
+#include <linux/of_gpio.h>
+#include <linux/gpio/consumer.h>
+#include <linux/gpio.h>
+
+
 /* datasheet:
  http://ptm2.cc.utu.fi/ftp/network/cards/DM9601/From_NET/DM9601-DS-P01-930914.pdf
 */
@@ -353,7 +359,9 @@ static const struct net_device_ops dm9601_netdev_ops = {
 static int dm9601_bind(struct usbnet *dev, struct usb_interface *intf)
 {
 	int ret;
+
 	u8 mac[ETH_ALEN], id;
+
 
 	ret = usbnet_get_endpoints(dev, intf);
 	if (ret)
@@ -375,7 +383,7 @@ static int dm9601_bind(struct usbnet *dev, struct usb_interface *intf)
 	dev->mii.mdio_write = dm9601_mdio_write;
 	dev->mii.phy_id_mask = 0x1f;
 	dev->mii.reg_num_mask = 0x1f;
-
+    
 	/* reset */
 	dm_write_reg(dev, DM_NET_CTRL, 1);
 	udelay(20);

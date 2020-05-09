@@ -94,7 +94,8 @@ static void __init stm32mp1_enet_phy_init(void)
     enum of_gpio_flags flags;
 
 	np = of_find_compatible_node(NULL,NULL,"myir,stm32mp157c-ya157c-v2");
-	if (NULL != np){
+	if (NULL != np)
+    {
 
             nphy = of_find_compatible_node(NULL,NULL,"myir,ar8035");
             
@@ -116,34 +117,9 @@ static void __init stm32mp1_enet_phy_init(void)
                 }
             }
 
-        printk("ar8035 rest er\n");
-	phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
+	    phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
     }
-
-	
-	
-            
-            gpio = of_get_named_gpio_flags(nphy, "phy1-gpios", 0, &flags);
-            if(!gpio_is_valid(gpio)){
-                    printk("the phy1 gpio failed\n");
-                    
-            }else{
-                
-                if(gpio_request(gpio, "phy1-gpio"))
-                {
-                    printk("can not request gpio\n");
-                    gpio_free(gpio);
-                }else{
-                    gpio_direction_output(gpio, 0);  
-			printk("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");                                                      
-                     msleep(10);
-                    gpio_free(gpio);
-
-                }
-	}
-       
-
-      		  
+    
 }
 
 //初始化文件操作结构体

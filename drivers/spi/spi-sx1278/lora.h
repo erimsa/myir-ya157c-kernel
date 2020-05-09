@@ -135,6 +135,8 @@ struct lora_struct {
 	uint8_t users;
 	struct mutex buf_lock;
 	wait_queue_head_t waitqueue;
+	struct gpio_desc *reset_gpio;
+    	struct gpio_desc *pwr_gpio;
 };
 
 /**

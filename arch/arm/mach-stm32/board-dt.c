@@ -82,9 +82,10 @@ static int ar8035_phy_fixup(struct phy_device *dev)
 
 static void __init stm32mp1_enet_phy_init(void)
 {
+    /*
     static struct device_node *np = NULL;
 
-/*
+
 	np = of_find_compatible_node(NULL,NULL,"myir,stm32mp151c-ya151c-t");
 	if (NULL != np){
 		phy_register_fixup_for_uid(PHY_ID_AR8035, 0xffffffef, ar8035_phy_fixup);
