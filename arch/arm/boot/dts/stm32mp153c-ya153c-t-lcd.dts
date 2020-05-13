@@ -34,11 +34,7 @@
 		};
 	};
 	
-	sound {
-        	status = "disable";
-    	};
 	
-
 };
 
 /*HDMI*/
@@ -50,10 +46,6 @@
 	};
 };
 
-&i2s2 {
-	status = "disable";
-
-};
 
 /*test LCD*/
 &ltdc {

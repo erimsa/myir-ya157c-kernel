@@ -2135,7 +2135,6 @@ static int wm8904_i2c_probe(struct i2c_client *i2c,
 	struct wm8904_priv *wm8904;
 	unsigned int val;
 	int ret, i;
-printk("----------------------------------------------------------\n");
 	wm8904 = devm_kzalloc(&i2c->dev, sizeof(struct wm8904_priv),
 			      GFP_KERNEL);
 	if (wm8904 == NULL)

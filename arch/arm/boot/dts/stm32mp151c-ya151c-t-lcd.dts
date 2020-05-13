@@ -34,9 +34,6 @@
 		};
 	};
 	
-	sound {
-        	status = "disable";
-    	};
 	
 
 };
@@ -50,10 +47,6 @@
 	};
 };
 
-&i2s2 {
-	status = "disable";
-
-};
 
 /*test LCD*/
 &ltdc {

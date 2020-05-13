@@ -35,6 +35,7 @@
 #include <linux/slab.h>
 #include <linux/uaccess.h>
 #include <linux/videodev2.h>
+#include <linux/gpio/consumer.h>
 
 #include <media/media-entity.h>
 #include <media/i2c/ov2659.h>
@@ -232,6 +233,7 @@ struct ov2659 {
 	struct sensor_register *format_ctrl_regs;
 	struct ov2659_pll_ctrl pll;
 	int streaming;
+    struct gpio_desc *gpio_reset, *gpio_power;
 };
 
 static const struct sensor_register ov2659_init_regs[] = {
@@ -1412,6 +1414,27 @@ static int ov2659_probe(struct i2c_client *client,
 
 	ov2659->pdata = pdata;
 	ov2659->client = client;
+    /*add power*/
+    ov2659->gpio_power = devm_gpiod_get(&client->dev, "powerdown",
+                                             GPIOD_OUT_HIGH);
+    if (IS_ERR(ov2659->gpio_power)){
+        dev_err(&client->dev, "pwdn gpio is required");
+               ret = -ENOMEM;
+    }
+
+    ov2659->gpio_reset = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
+    if(IS_ERR(ov2659->gpio_reset)){
+          dev_err(&client->dev, "reset gpio is required");
+          ret = -ENOMEM;
+    }
+
+    gpiod_direction_output(ov2659->gpio_power, 1);
+    mdelay(100);
+
+    gpiod_direction_output(ov2659->gpio_reset, 0);
+    mdelay(100);
+    gpiod_direction_output(ov2659->gpio_reset, 1);
+    mdelay(100);
 
 	clk = devm_clk_get(&client->dev, "xvclk");
 	if (IS_ERR(clk))

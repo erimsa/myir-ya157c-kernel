@@ -1586,7 +1586,7 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
 				WARN_ONCE(1, "transfer buffer not dma capable\n");
 				ret = -EAGAIN;
 			} else if (object_is_on_stack(urb->transfer_buffer)) {
-				WARN_ONCE(1, "transfer buffer is on stack\n");
+				//WARN_ONCE(1, "transfer buffer is on stack\n");
 				ret = -EAGAIN;
 			} else {
 				urb->transfer_dma = dma_map_single(

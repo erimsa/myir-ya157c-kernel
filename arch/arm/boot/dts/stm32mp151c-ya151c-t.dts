@@ -285,6 +285,24 @@
 	};
 };
 
+&i2s1 {
+	clocks = <&rcc SPI1>, <&rcc SPI1_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
+	clock-names = "pclk", "i2sclk", "x8k", "x11k";
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&i2s1_pins_z_mx>;
+	pinctrl-1 = <&i2s1_sleep_pins_z_mx>;
+	status = "okay";
+	
+	i2s1_port: port@0 {
+		cpu_endpoint: endpoint {
+			remote-endpoint = <&codec_endpoint>;
+			format = "i2s";
+			mclk-fs = <256>;
+		};
+	};
+
+};
+
 
 &i2c1 {
 	pinctrl-names = "default", "sleep";
@@ -366,7 +384,7 @@
 	codec_wm8904: wm8904@1a {
 		compatible = "wlf,wm8904";
 		reg = <0x1a>;
-		clocks = <&rcc SPI2_K>;
+		clocks = <&rcc SPI1>;
 		clock-names = "mclk";
 		status = "okay";
 				
@@ -538,23 +556,6 @@
     
 };
 
-&i2s1 {
-	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
-	clock-names = "pclk", "i2sclk", "x8k", "x11k";
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2s1_pins_z_mx>;
-	pinctrl-1 = <&i2s1_sleep_pins_z_mx>;
-	status = "okay";
-	
-	i2s1_port: port@0 {
-		cpu_endpoint: endpoint {
-			remote-endpoint = <&codec_endpoint>;
-			format = "i2s";
-			mclk-fs = <256>;
-		};
-	};
-
-};
 
 &ipcc {
 	status = "okay";
@@ -891,6 +892,7 @@
 };
 */
 
+/*USB otg*/
 /*
 &usbotg_hs {
 	pinctrl-names = "default";
@@ -902,7 +904,7 @@
 };
 */
 
-
+/*
 &usbotg_hs {
 	dr_mode = "host";
 	pinctrl-names = "default";
@@ -912,9 +914,9 @@
         vbus-supply = <&vbus_otg>;
 	status = "okay";
 };
+*/
 
 
-/*
 &usbh_ehci {
 	phys = <&usbphyc_port1 1>;
 	phy-names = "usb2-phy";
@@ -922,12 +924,13 @@
 };
 
 
+
 &usbh_ohci {
    phys = <&usbphyc_port1 1>; 
    phy-names = "usb2-phy";
    status = "okay";
 };
-*/
+
 
 
 &usbphyc {

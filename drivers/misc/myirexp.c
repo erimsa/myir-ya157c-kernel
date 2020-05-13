@@ -54,7 +54,7 @@ static void __init myirexp_board_init(void)
                  gpio_free(gpio);
              }else{
                   gpio_direction_output(gpio, 0);
-                 msleep(100);
+                 msleep(200);
                  gpio_direction_output(gpio, 1);
                  }
  
