@@ -66,10 +66,10 @@
 	sound {
 		compatible = "audio-graph-card";
 		label = "STM32MP1-myir";
-		routing =
+		/*routing =
 			"Playback" , "MCLK",
 			"Capture" , "MCLK",
-			"MICL" , "Mic Bias";
+			"MICL" , "Mic Bias";*/
 		dais = <&i2s1_port>;
 		status = "okay";
 	};
@@ -328,6 +328,7 @@
         /delete-property/dma-names;
 	clock-frequency = <100000>;
 	
+/*
 	touchscreen@38 {
               compatible ="edt,edt-ft5x06";
               reg = <0x38>;
@@ -341,7 +342,21 @@
               reset-gpios = <&gpiog 3 GPIO_ACTIVE_LOW>;
               status = "okay";
       };
-	
+*/
+
+	goodix_ts@5d {
+		compatible = "goodix,gt911";
+		reg = <0x5d>;
+		status = "okay";
+
+		interrupts = <2  IRQ_TYPE_EDGE_FALLING>;
+              interrupt-parent = <&gpiog>;
+              interrupt-controller;
+              touchscreen-size-x = <800>;
+              touchscreen-size-y = <480>;
+
+              reset-gpios = <&gpiog 3 GPIO_ACTIVE_LOW>;
+	};
 
 	camera@30 {
 		compatible = "ovti,ov2659";
@@ -384,7 +399,7 @@
 	codec_wm8904: wm8904@1a {
 		compatible = "wlf,wm8904";
 		reg = <0x1a>;
-		clocks = <&rcc SPI1>;
+		clocks = <&rcc SPI1_K>;
 		clock-names = "mclk";
 		status = "okay";
 				
@@ -883,14 +898,6 @@
 	status = "okay";
 };
 
-/*USB*/
-/*
-&usbh_ohci {
-   phys = <&usbphyc_port0>; 
-   phy-names = "usb";
-   status = "okay";
-};
-*/
 
 /*USB otg*/
 /*
@@ -904,7 +911,7 @@
 };
 */
 
-/*
+/*USB host for dm9621*/
 &usbotg_hs {
 	dr_mode = "host";
 	pinctrl-names = "default";
@@ -914,23 +921,21 @@
         vbus-supply = <&vbus_otg>;
 	status = "okay";
 };
-*/
 
 
+/*
 &usbh_ehci {
 	phys = <&usbphyc_port1 1>;
 	phy-names = "usb2-phy";
 	status = "okay";
 };
 
-
-
 &usbh_ohci {
    phys = <&usbphyc_port1 1>; 
    phy-names = "usb2-phy";
    status = "okay";
 };
-
+*/
 
 
 &usbphyc {

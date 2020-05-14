@@ -642,6 +642,12 @@ config SPI_SUN6I
 	help
 	  This enables using the SPI controller on the Allwinner A31 SoCs.
 
+config SPI_SX127X
+    tristate "SX127X SPI lora"
+    depends on SPI
+    help
+       For SPI lora
+
 config SPI_MXS
 	tristate "Freescale MXS SPI controller"
 	depends on ARCH_MXS
