@@ -250,7 +250,7 @@ static int myir_panel_probe(struct device *dev,
 	struct myir_panel *panel;
 	int err;
     
-    //printk("----------------------------->test1<------------------------\n");
+    printk("----------------------------->test1<------------------------\n");
 
 	panel = devm_kzalloc(dev, sizeof(*panel), GFP_KERNEL);
 	if (!panel)
@@ -281,7 +281,7 @@ static int myir_panel_probe(struct device *dev,
 	panel->base.dev = dev;
 	panel->base.funcs = &myir_panel_funcs;
     
-   // printk("----------------->test2<--------------------\n");
+    printk("----------------->test2<--------------------\n");
 	err = drm_panel_add(&panel->base);
 	if (err < 0)
 		return err;
@@ -313,17 +313,29 @@ static void myir_panel_shutdown(struct platform_device *pdev)
 }
 
 static const struct display_timing myir_070tft_timing = {
-	/*.pixelclock = { 33500000, 33500000, 33500000 },
+/*	.pixelclock = { 33300000, 33300000, 33300000 },
 	.hactive = { 800, 800, 800 },
-	.hfront_porch = {  164, 164, 164 },
-	.hback_porch = { 89, 89, 89 },
-	.hsync_len = { 10, 10, 10 },
+	.hfront_porch = {  210, 210, 210 },
+	.hback_porch = { 46, 46, 46 },
+	.hsync_len = { 40, 40, 40 },
+
 	.vactive = { 480, 480, 480 },
-	.vfront_porch = { 10, 10, 10 },
+	.vfront_porch = { 22, 22, 22 },
 	.vback_porch = { 23, 23, 23 },
-	.vsync_len = { 10, 10, 10 },*/
+	.vsync_len = { 1, 1, 1 },
+*/
+        .pixelclock = { 33300000, 34209000, 45000000 },
+            .hactive = { 800, 800, 800 },
+                .hfront_porch = { 20, 40, 200 },
+                    .hback_porch = { 87, 40, 1 },
+                        .hsync_len = { 1, 48, 87 },
+                            .vactive = { 480, 480, 480 },
+                                .vfront_porch = { 5, 13, 200 },
+                                    .vback_porch = { 31, 31, 29 },
+                                        .vsync_len = { 1, 1, 3 },
 
 
+/*   //myir ya157c
 	.pixelclock = {33000000,33000000,33000000},
 	.hactive = {800,800,800},
 	.hfront_porch = {210,210,210},
@@ -334,7 +346,7 @@ static const struct display_timing myir_070tft_timing = {
 	.vback_porch = {22,22,22},
 	.vsync_len = {20,20,20},
 	//.flags = DISPLAY_FLAGS_DE_LOW,
-
+*/
 /*	.pixelclock = { 26400000, 33300000, 46800000 },
 	.hactive = { 800, 800, 800 },
 	.hfront_porch = { 16, 210, 354 },
@@ -364,8 +376,11 @@ static const struct myir_panel_desc myir_070tft = {
 	.num_timings = 1,
 	.bpc = 6,
 	.size = {
-		.width = 154,
-		.height = 86,
+		//.width = 154,
+		//.height = 86,
+        .width = 115,
+        .height = 86,
+
 	},
 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
 	//.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_POSEDGE,

@@ -21,7 +21,7 @@
         	pinctrl-names = "default", "sleep";
         	pinctrl-0 = <&ltdc_pins_a>;
         	pinctrl-1 = <&ltdc_pins_sleep_a>;
-        	reset-gpios = <&gpiog 1 GPIO_ACTIVE_LOW>;
+        	//reset-gpios = <&gpiog 1 GPIO_ACTIVE_LOW>;
 
 		//backlight = <&panel_backlight>;
        	 	status = "okay";

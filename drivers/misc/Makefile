@@ -59,6 +59,6 @@ obj-$(CONFIG_PCI_ENDPOINT_TEST)	+= pci_endpoint_test.o
 obj-$(CONFIG_OCXL)		+= ocxl/
 obj-$(CONFIG_MISC_RTSX)		+= cardreader/
 
-#for myir ya157c-v2 ar8035 and ya15xc exp board
-obj-y                       += phyinit.o
+#for myir ya15xc exp board
+#obj-y                       += phyinit.o
 obj-y                       += myirexp.o
