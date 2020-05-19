@@ -794,6 +794,22 @@
 					pinmux = <STM32_PINMUX('A', 3, ANALOG)>; /* TIM2_CH4 */
 				};
 			};
+			
+			//for ya15xc-t
+			pwm2_pins_mx: pwm2_mx-0 {
+				pins {
+					pinmux = <STM32_PINMUX('G', 8, AF1)>; /* TIM2_CH1 */
+					bias-disable;
+					drive-push-pull;
+					slew-rate = <0>;
+				};
+			};
+
+			pwm2_sleep_pins_mx: pwm2_sleep_mx-0 {
+				pins {
+					pinmux = <STM32_PINMUX('G', 8, ANALOG)>; /* TIM2_CH1 */
+				};
+			};
 
 			pwm3_pins_a: pwm3-0 {
 				pins {
@@ -1565,6 +1581,14 @@
 				};
 			};
 		};
+
+         gt911_irq:gt911_irq {
+                pins {
+                    pinmux = <STM32_PINMUX('G', 2, GPIO)>; /* PG2.GPIO */
+                    bias-pull-down;
+                    drive-push-pull;
+                    };
+         };
 
 		pinctrl_z: pin-controller-z@54004000 {
 			#address-cells = <1>;

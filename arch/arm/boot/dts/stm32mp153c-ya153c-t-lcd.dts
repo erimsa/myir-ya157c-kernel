@@ -7,7 +7,7 @@
 
 /dts-v1/;
 
-#include "stm32mp153c-ya153c-t-hdmi.dts"
+#include "stm32mp153c-ya153c-t.dts"
 
 / {
     	model = "MYIR YA153C-T lcd  www.myir-tech.com";
@@ -21,9 +21,8 @@
         	pinctrl-names = "default", "sleep";
         	pinctrl-0 = <&ltdc_pins_a>;
         	pinctrl-1 = <&ltdc_pins_sleep_a>;
-        	reset-gpios = <&gpiog 1 GPIO_ACTIVE_LOW>;
-
-		//backlight = <&panel_backlight>;
+        //	reset-gpios = <&gpiog 1 GPIO_ACTIVE_LOW>;
+		backlight = <&panel_backlight>;
        	 	status = "okay";
 		
 		port {
@@ -36,16 +35,6 @@
 	
 	
 };
-
-/*HDMI*/
-&i2c2 {
-	hdmi-transmitter@39 {
-		compatible = "sil,sii9022";
-		reg = <0x39>;
-		status = "disable";
-	};
-};
-
 
 /*test LCD*/
 &ltdc {

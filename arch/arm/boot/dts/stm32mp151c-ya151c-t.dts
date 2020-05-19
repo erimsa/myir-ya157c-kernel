@@ -74,12 +74,21 @@
 		status = "okay";
 	};
 
-	panel_backlight: panel-backlight {
+/*	panel_backlight: panel-backlight {
 		compatible = "gpio-backlight";
 		gpios = <&gpiog 8 GPIO_ACTIVE_HIGH>;
 		default-on;	
-		status = "disabled";
+		status = "okay";
 	};
+*/
+    panel_backlight: panel-backlight {
+        compatible = "pwm-backlight";
+        pwms = <&pwm2 0 5000000>;
+        brightness-levels = <0 4 8 16 32 64 128 255>;
+        default-brightness-level = <6>;
+        status = "okay";
+   };
+
 	cpu0_opp_table: cpu0-opp-table {
           	compatible = "operating-points-v2";
           	opp-shared;
@@ -328,7 +337,7 @@
         /delete-property/dma-names;
 	clock-frequency = <100000>;
 	
-/*
+
 	touchscreen@38 {
               compatible ="edt,edt-ft5x06";
               reg = <0x38>;
@@ -342,20 +351,20 @@
               reset-gpios = <&gpiog 3 GPIO_ACTIVE_LOW>;
               status = "okay";
       };
-*/
 
-	goodix_ts@5d {
+
+	goodix_ts@14 {
 		compatible = "goodix,gt911";
-		reg = <0x5d>;
+		reg = <0x14>;
 		status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&gt911_irq>;
 
-		interrupts = <2  IRQ_TYPE_EDGE_FALLING>;
-              interrupt-parent = <&gpiog>;
-              interrupt-controller;
-              touchscreen-size-x = <800>;
-              touchscreen-size-y = <480>;
+        irq-gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpiog 3 GPIO_ACTIVE_HIGH>;
 
-              reset-gpios = <&gpiog 3 GPIO_ACTIVE_LOW>;
+        touchscreen-size-x = <800>;
+        touchscreen-size-y = <480>;
 	};
 
 	camera@30 {
@@ -724,25 +733,25 @@
         status = "okay";
 };
 
-
-
 /*pwm for backlight no usr*/
-&timers15 {
-	/delete-property/dmas;
-	/delete-property/dma-names;
-	pwm {
-		pinctrl-0 = <&pwm15_pins_a>;
-		pinctrl-1 = <&pwm15_sleep_pins_a>;
-		pinctrl-names = "default", "sleep";
-		status = "okay";
-	};
-	timer@14 {
-		status = "okay";
-	};
+&timers2 {
+        status = "okay";
+            /* spare dmas for other usage */
+        /delete-property/dmas;
+        /delete-property/dma-names;
+        pwm2: pwm {
+              pinctrl-0 = <&pwm2_pins_mx>;
+              pinctrl-1 = <&pwm2_sleep_pins_mx>;
+              pinctrl-names = "default", "sleep";
+              #pwm-cells = <2>;
+              status = "okay";
+        };
+       timer@1 {
+             status = "disabled";
+      };
 };
 
 /*SPI5 for sx1278*/
-
 &spi5 {
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&spi5_pins_mx>;

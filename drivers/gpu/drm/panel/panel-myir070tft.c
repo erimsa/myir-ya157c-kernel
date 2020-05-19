@@ -249,8 +249,6 @@ static int myir_panel_probe(struct device *dev,
 	struct device_node *backlight;
 	struct myir_panel *panel;
 	int err;
-    
-    printk("----------------------------->test1<------------------------\n");
 
 	panel = devm_kzalloc(dev, sizeof(*panel), GFP_KERNEL);
 	if (!panel)
@@ -281,10 +279,12 @@ static int myir_panel_probe(struct device *dev,
 	panel->base.dev = dev;
 	panel->base.funcs = &myir_panel_funcs;
     
-    printk("----------------->test2<--------------------\n");
+   
 	err = drm_panel_add(&panel->base);
-	if (err < 0)
+	if (err < 0){
 		return err;
+    }
+
 
 	dev_set_drvdata(dev, panel);
 
@@ -324,18 +324,8 @@ static const struct display_timing myir_070tft_timing = {
 	.vback_porch = { 23, 23, 23 },
 	.vsync_len = { 1, 1, 1 },
 */
-        .pixelclock = { 33300000, 34209000, 45000000 },
-            .hactive = { 800, 800, 800 },
-                .hfront_porch = { 20, 40, 200 },
-                    .hback_porch = { 87, 40, 1 },
-                        .hsync_len = { 1, 48, 87 },
-                            .vactive = { 480, 480, 480 },
-                                .vfront_porch = { 5, 13, 200 },
-                                    .vback_porch = { 31, 31, 29 },
-                                        .vsync_len = { 1, 1, 3 },
 
-
-/*   //myir ya157c
+   //myir ya157c
 	.pixelclock = {33000000,33000000,33000000},
 	.hactive = {800,800,800},
 	.hfront_porch = {210,210,210},
@@ -346,75 +336,23 @@ static const struct display_timing myir_070tft_timing = {
 	.vback_porch = {22,22,22},
 	.vsync_len = {20,20,20},
 	//.flags = DISPLAY_FLAGS_DE_LOW,
-*/
-/*	.pixelclock = { 26400000, 33300000, 46800000 },
-	.hactive = { 800, 800, 800 },
-	.hfront_porch = { 16, 210, 354 },
-	.hback_porch = { 45, 36, 6 },
-	.hsync_len = { 1, 10, 40 },
-	.vactive = { 480, 480, 480 },
-	.vfront_porch = { 7, 22, 147 },
-	.vback_porch = { 22, 13, 3 },
-	.vsync_len = { 1, 10, 20 },
-	//.flags = DISPLAY_FLAGS_HSYNC_LOW | DISPLAY_FLAGS_VSYNC_LOW |
-	//	DISPLAY_FLAGS_DE_HIGH | DISPLAY_FLAGS_PIXDATA_POSEDGE
-*/
+
+
 };
 
 static const struct myir_panel_desc myir_070tft = {
-/*	.timings = &myir_070tft_timing,
-	.num_timings = 1,
-	.bpc = 8,
-	.size = {
-		.width = 93,
-		.height = 57,
-	},
-	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
-	.bus_flags = DRM_BUS_FLAG_DE_HIGH,// | DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE,
-*/
 	.timings = &myir_070tft_timing,
 	.num_timings = 1,
 	.bpc = 6,
 	.size = {
-		//.width = 154,
-		//.height = 86,
-        .width = 115,
-        .height = 86,
+		.width = 154,
+		.height = 86,
 
 	},
 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
 	//.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_POSEDGE,
 
 };
-
-/*
-static const struct drm_display_mode myir_070tft_mode = {
-          .clock = 33333,
-          .hdisplay = 800,
-          .hsync_start = 800 + 0,
-          .hsync_end = 800 + 0 + 255,
-          .htotal = 800 + 0 + 255 + 0,
-          .vdisplay = 480,
-          .vsync_start = 480 + 2,
-          .vsync_end = 480 + 2 + 45,
-          .vtotal = 480 + 2 + 45 + 0,
-          .vrefresh = 60,
-          .flags = DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC,
-};
-   
-static const struct panel_desc myir_070tft = {
-           .modes = &myir_070tft_mode,
-           .num_modes = 1,
-           .bpc = 6,
-           .size = {
-                 .width = 152,
-                 .height = 91,
-            },
-           .bus_format = MEDIA_BUS_FMT_RGB666_1X18,
- };
-*/
-
-
 
 static const struct of_device_id platform_of_match[] = {
 	{

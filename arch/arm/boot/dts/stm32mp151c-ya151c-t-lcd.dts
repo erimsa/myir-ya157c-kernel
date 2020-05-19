@@ -7,7 +7,7 @@
 
 /dts-v1/;
 
-#include "stm32mp151c-ya151c-t-hdmi.dts"
+#include "stm32mp151c-ya151c-t.dts"
 
 / {
     	model = "MYIR YA151C-T www.myir-tech.com";
@@ -22,8 +22,7 @@
         	pinctrl-0 = <&ltdc_pins_a>;
         	pinctrl-1 = <&ltdc_pins_sleep_a>;
         	//reset-gpios = <&gpiog 1 GPIO_ACTIVE_LOW>;
-
-		//backlight = <&panel_backlight>;
+		backlight = <&panel_backlight>;
        	 	status = "okay";
 		
 		port {
@@ -36,15 +35,6 @@
 	
 	
 
-};
-
-/*HDMI*/
-&i2c2 {
-	hdmi-transmitter@39 {
-		compatible = "sil,sii9022";
-		reg = <0x39>;
-		status = "disable";
-	};
 };
 
 
