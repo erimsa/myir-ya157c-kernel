@@ -21,9 +21,9 @@
 	aliases {
 		ethernet0 = &ethernet0;
 		serial0 = &uart4;
-		serial2 = &uart8;//rs232
+		//serial2 = &uart8;//rs232
 		serial3 = &uart5;//rs485
-        serial5 = &uart7;//bt
+        	serial5 = &uart7;//bt
 	};
 
 	chosen {
@@ -306,7 +306,7 @@
 		cpu_endpoint: endpoint {
 			remote-endpoint = <&codec_endpoint>;
 			format = "i2s";
-			mclk-fs = <256>;
+			mclk-fs = <512>;
 		};
 	};
 
@@ -365,21 +365,18 @@
 		irq-flags = <IRQ_TYPE_EDGE_RISING>;
 		
         	reset-gpios = <&gpiog 3 GPIO_ACTIVE_HIGH>;
-		
-
 	};
-
+/*
 	tsc2007: tsc2007@48 {
 		compatible = "ti,tsc2007";
 		reg = <0x48>;
 		interrupt-parent = <&gpiog>;
 		interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
-		interrupt-controller;
-		reser-gpios = <&gpiog 3 GPIO_ACTIVE_HIGH>;
-		ti,x-plate-ohms = <660>;
+		gpios = <&gpiog 0 0>;
+		ti,x-plate-ohms = <180>;
 		status = "okay";
 	};
-
+*/
 	camera@30 {
 		compatible = "ovti,ov2659";
 		reg = <0x30>;
@@ -737,6 +734,7 @@
 	status = "okay";
 };
 */
+
 /*rs485*/
 &uart5 {
        pinctrl-names = "default", "sleep";
@@ -912,7 +910,6 @@
 };
 
 /*usb host*/
-
 &usbh_ehci {
 	reset-gpios = <&gpioi 8 GPIO_ACTIVE_HIGH>;
 	phys = <&usbphyc_port0>;
@@ -943,21 +940,6 @@
         vbus-supply = <&vbus_otg>;
 	status = "okay";
 };
-
-
-/*
-&usbh_ehci {
-	phys = <&usbphyc_port1 1>;
-	phy-names = "usb2-phy";
-	status = "okay";
-};
-
-&usbh_ohci {
-   phys = <&usbphyc_port1 1>; 
-   phy-names = "usb2-phy";
-   status = "okay";
-};
-*/
 
 
 &usbphyc {
