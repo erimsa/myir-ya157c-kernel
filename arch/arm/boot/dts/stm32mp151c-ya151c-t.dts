@@ -66,10 +66,10 @@
 	sound {
 		compatible = "audio-graph-card";
 		label = "STM32MP1-myir";
-		/*routing =
+		routing =
 			"Playback" , "MCLK",
 			"Capture" , "MCLK",
-			"MICL" , "Mic Bias";*/
+			"MICL" , "Mic Bias";
 		dais = <&i2s1_port>;
 		status = "okay";
 	};
