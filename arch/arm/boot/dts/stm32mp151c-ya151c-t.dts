@@ -897,7 +897,7 @@
 
 /*usb host*/
 &usbh_ehci {
-	reset-gpios = <&gpioi 8 GPIO_ACTIVE_HIGH>;
+	//reset-gpios = <&gpioi 8 GPIO_ACTIVE_HIGH>;
 	phys = <&usbphyc_port0>;
 	phy-names = "usb";
 	status = "okay";

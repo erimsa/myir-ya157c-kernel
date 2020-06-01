@@ -508,6 +508,10 @@ config PCI_ENDPOINT_TEST
 	---help---
            Enable this configuration option to enable the host side test driver
            for PCI Endpoint.
+config MYIR_EXP
+	tristate "Part of the peripheral power supply configuration"
+	---help---
+		For myir exp board
 
 config MISC_RTSX
 	tristate

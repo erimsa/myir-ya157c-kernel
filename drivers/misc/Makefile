@@ -61,4 +61,4 @@ obj-$(CONFIG_MISC_RTSX)		+= cardreader/
 
 #for myir ya15xc exp board
 #obj-y                       += phyinit.o
-obj-y                       += myirexp.o
+obj-$(CONFIG_MYIR_EXP)     += myirexp.o
