@@ -983,7 +983,6 @@ static void dma_cache_maint_page(struct page *page, unsigned long offset,
 		left -= len;
 	} while (left);
 }
-
 /*
  * Make an area consistent for devices.
  * Note: Drivers should NOT use this function directly, as it will break

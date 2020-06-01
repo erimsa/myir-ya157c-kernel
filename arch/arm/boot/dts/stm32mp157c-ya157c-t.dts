@@ -12,8 +12,18 @@
 / {
 	model = "MYIR YA157C-T www.myir-tech.com";
 	compatible = "myir,stm32mp157c-ya157c-t", "st,stm32mp157c-dk2", "st,stm32mp157";
+	
+	reserved-memory {
+		gpu_reserved: gpu@d4000000 {
+			reg = <0xd4000000 0x4000000>;
+			no-map;
+		};
 
+	};
 
 };
 
-
+&gpu {
+	contiguous-area = <&gpu_reserved>;
+	status = "okay";
+};

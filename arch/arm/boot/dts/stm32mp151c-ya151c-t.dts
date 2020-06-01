@@ -62,6 +62,14 @@
 			clock-frequency = <12000000>;
 		};
 	};
+	
+	 clocks_audio {
+		clk_audio: clk-audio {
+			#clock-cells = <0>;
+			compatible = "fixed-clock";
+			clock-frequency = <12288000>;
+		};
+	};
 		
 	sound {
 		compatible = "audio-graph-card";
@@ -139,10 +147,7 @@
 			reg = <0x10044000 0x4000>;
 			no-map;
 		};
-		gpu_reserved: gpu@d4000000 {
-			reg = <0xd4000000 0x4000000>;
-			no-map;
-		};
+		
 
 	};
 
@@ -197,6 +202,7 @@
 &cpu0{
       cpu-supply = <&vddcore>;
    };
+
 /*myir pin header
  *ANA0  ANA1 
  *PF13(ADC2_INP2) PF11(ADC1_INP2) 
@@ -235,10 +241,6 @@
 	};
 };
 
-&gpu {
-	contiguous-area = <&gpu_reserved>;
-	status = "okay";
-};
 
 &cec {
 	pinctrl-names = "default", "sleep";
@@ -336,22 +338,6 @@
         /delete-property/dmas;
         /delete-property/dma-names;
 	clock-frequency = <100000>;
-	
-/*
-	touchscreen@38 {
-              compatible ="edt,edt-ft5x06";
-              reg = <0x38>;
-
-              interrupts = <2  IRQ_TYPE_EDGE_FALLING>;
-              interrupt-parent = <&gpiog>;
-              interrupt-controller;
-              touchscreen-size-x = <800>;
-              touchscreen-size-y = <480>;
-
-              reset-gpios = <&gpiog 3 GPIO_ACTIVE_LOW>;
-              status = "okay";
-      };
-*/
 
 	goodix_ts@14 {
 		compatible = "goodix,gt911";
@@ -418,7 +404,7 @@
 	codec_wm8904: wm8904@1a {
 		compatible = "wlf,wm8904";
 		reg = <0x1a>;
-		clocks = <&rcc SPI1_K>;
+		clocks = <&clk_audio>;
 		clock-names = "mclk";
 		status = "okay";
 				

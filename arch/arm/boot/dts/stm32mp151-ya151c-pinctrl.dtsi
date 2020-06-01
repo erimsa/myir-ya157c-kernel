@@ -664,25 +664,7 @@
 				};
 			};
 
-			fdcan1_pins_mx: fdcan1_mx-0 {
-				pins1 {
-					pinmux = <STM32_PINMUX('A', 11, AF9)>; /* FDCAN1_RX */
-					bias-disable;
-				};
-				pins2 {
-					pinmux = <STM32_PINMUX('A', 12, AF9)>; /* FDCAN1_TX */
-					bias-disable;
-					drive-push-pull;
-					slew-rate = <0>;
-				};
-			};
-
-			fdcan1_sleep_pins_mx: fdcan1_sleep_mx-0 {
-				pins {
-					pinmux = <STM32_PINMUX('A', 11, ANALOG)>, /* FDCAN1_RX */
-						 <STM32_PINMUX('A', 12, ANALOG)>; /* FDCAN1_TX */
-				};
-			};
+			
 			
 			/*V1.2 hardware 2019/11/5*/
 			ltdc_pins_a: ltdc-a-0 {

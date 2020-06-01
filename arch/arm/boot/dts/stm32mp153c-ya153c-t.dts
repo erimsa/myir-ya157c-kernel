@@ -6,9 +6,9 @@
 
 /dts-v1/;
 
-//#include "stm32mp153c.dtsi"
+
 #include "stm32mp151c-ya151c-t.dts"
-//#include "stm32mp153cac-ya153c-pinctrl.dtsi"
+#include "stm32mp153cac-ya153c-pinctrl.dtsi"
 #include <dt-bindings/rtc/rtc-stm32.h>
 
 
@@ -32,24 +32,12 @@
 
      	};
 
-	reserved-memory {
-		gpu_reserved: gpu@d4000000 {
-			reg = <0xd4000000 0x4000000>;
-			no-map;
-		};
-
-	};
+	
 
 };
 
 &cpu1{
 	cpu-supply = <&vddcore>;
-};
-
-
-&gpu {
-	contiguous-area = <&gpu_reserved>;
-	status = "okay";
 };
 
 
