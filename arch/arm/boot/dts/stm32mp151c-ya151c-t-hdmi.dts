@@ -11,7 +11,7 @@
 
 / {
     model = "MYIR YA151C-T www.myir-tech.com";
-    compatible = "myir,stm32mp151c-ya151c-t", "myir,stm32mp157c-ya157c", "st,stm32mp157c-dk2", "st,stm32mp157";
+    compatible = "myir,stm32mp151c-ya151c-t", "st,stm32mp157c-dk2", "st,stm32mp157";
     
     sound {
         dais = <&i2s2_port>;

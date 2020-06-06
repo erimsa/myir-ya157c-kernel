@@ -10,7 +10,7 @@
 #include "stm32mp157c-ya157c-t.dts"
 
 / {
-    model = "MYIR YA153C-T www.myir-tech.com";
+    model = "MYIR YA157C-T www.myir-tech.com";
     compatible = "myir,stm32mp157c-ya157c-t", "st,stm32mp157c-dk2", "st,stm32mp157";
   
 	sound {

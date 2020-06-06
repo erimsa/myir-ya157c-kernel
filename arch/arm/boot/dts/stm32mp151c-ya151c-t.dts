@@ -16,7 +16,7 @@
 
 / {
 	model = "MYIR YA151C-T www.myir-tech.com";
-	compatible = "myir,stm32mp151c-ya151c-t", "myir,stm32mp157c-ya157c", "st,stm32mp157c-dk2", "st,stm32mp157";
+	compatible = "myir,stm32mp151c-ya151c-t", "st,stm32mp157c-dk2", "st,stm32mp157";
 
 	aliases {
 		ethernet0 = &ethernet0;
@@ -73,11 +73,10 @@
 		
 	sound {
 		compatible = "audio-graph-card";
-		label = "STM32MP1-myir";
+		label = "STM32MP1-DK";
 		routing =
-			"Playback" , "MCLK",
-			"Capture" , "MCLK",
-			"MICL" , "Mic Bias";
+			"Capture",
+			"Playback";
 		dais = <&i2s1_port>;
 		status = "okay";
 	};
@@ -201,7 +200,7 @@
 
 &cpu0{
       cpu-supply = <&vddcore>;
-   };
+};
 
 /*myir pin header
  *ANA0  ANA1 
@@ -283,7 +282,7 @@
 
 /*DCMI for camera*/
 &dcmi {
-	status = "okay";
+	status = "disable";
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&dcmi_pins_mx>;
 	pinctrl-1 = <&dcmi_sleep_pins_mx>;
@@ -294,24 +293,6 @@
                         link-frequencies = /bits/ 64 <70000000>;
 		};
 	};
-};
-
-&i2s1 {
-	clocks = <&rcc SPI1>, <&rcc SPI1_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
-	clock-names = "pclk", "i2sclk", "x8k", "x11k";
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&i2s1_pins_z_mx>;
-	pinctrl-1 = <&i2s1_sleep_pins_z_mx>;
-	status = "okay";
-	
-	i2s1_port: port@0 {
-		cpu_endpoint: endpoint {
-			remote-endpoint = <&codec_endpoint>;
-			format = "i2s";
-			mclk-fs = <512>;
-		};
-	};
-
 };
 
 
@@ -344,9 +325,6 @@
 		reg = <0x14>;
 		status = "okay";
 		
-        	//pinctrl-names = "default";
-        	//pinctrl-0 = <&gt911_irq>;
-        	//irq-gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
 		irq-gpios = <&gpiog 2 GPIO_ACTIVE_HIGH>;
 		irq-flags = <IRQ_TYPE_EDGE_RISING>;
 		
@@ -371,7 +349,7 @@
 		powerdown-gpios = <&pcf8575 5 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
 		reset-gpios = <&pcf8575 6 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
 
-		status = "okay";
+		status = "disabled";
 		
 		port {
 			camera0: endpoint {
@@ -417,6 +395,24 @@
 	};
 };
 
+
+&i2s1 {
+	clocks = <&rcc SPI1>, <&rcc SPI1_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
+	clock-names = "pclk", "i2sclk", "x8k", "x11k";
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&i2s1_pins_z_mx>;
+	pinctrl-1 = <&i2s1_sleep_pins_z_mx>;
+	status = "okay";
+	
+	i2s1_port: port@0 {
+		cpu_endpoint: endpoint {
+			remote-endpoint = <&codec_endpoint>;
+			format = "i2s";
+			mclk-fs = <256>;
+		};
+	};
+
+};
 
 &i2c4 {
 	pinctrl-names = "default", "sleep";
@@ -564,6 +560,7 @@
 			compatible = "st,stpmic1-onkey";
 			interrupts = <IT_PONKEY_F 0>, <IT_PONKEY_R 1>;
 			interrupt-names = "onkey-falling", "onkey-rising";
+			power-off-time-sec = <10>;
 			status = "okay";
 		};
 
@@ -793,9 +790,6 @@
 };
 */
 
-
-
-
 &timers1 {
 	/* spare dmas for other usage */
 	/delete-property/dmas;
@@ -896,6 +890,7 @@
 };
 
 /*usb host*/
+
 &usbh_ehci {
 	//reset-gpios = <&gpioi 8 GPIO_ACTIVE_HIGH>;
 	phys = <&usbphyc_port0>;
