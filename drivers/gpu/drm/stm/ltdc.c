@@ -855,7 +855,7 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
 
 	mutex_lock(&ldev->err_lock);
 	if (ldev->error_status & ISR_FUIF) {
-		DRM_WARN("ltdc fifo underrun: please verify display mode\n");
+		//DRM_WARN("ltdc fifo underrun: please verify display mode\n");
 		ldev->error_status &= ~ISR_FUIF;
 	}
 	if (ldev->error_status & ISR_TERRIF) {
